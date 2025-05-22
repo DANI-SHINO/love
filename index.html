@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Aniversario</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#FFB6C1',secondary:'#DAA520'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFE4E1 100%);
+            font-family: 'Dancing Script', cursive;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+        /* ... (tu código CSS anterior) ... */
+
+        /* ... (tu código CSS anterior hasta .petal) ... */
+
+        .petal {
+            position: absolute;
+            width: 80px;
+            height: 120px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            top: 50%;
+            left: 50%;
+            transform-origin: center center; /* El punto de rotación del pétalo es su propio centro */
+            transform: translate(-50%, -50%); /* Centra el pétalo en el contenedor */
+            cursor: pointer; /* Añadido para indicar que es clicable */
+        }
+
+        /* Modificamos el hover para que se desplacen un poco más hacia afuera, manteniendo su orientación */
+        .petal:hover {
+            filter: brightness(1.1);
+            z-index: 20; /* Asegura que el pétalo sobre el que se hace hover esté por encima de los demás */
+            /* Para que se "eleven" o se "separen", aumentamos el desplazamiento negativo de translateY */
+            /* Cada pétalo ya tiene su transform: translate(-50%, -50%) rotate(...) translateY(-90px) */
+            /* Al hacer hover, queremos que ese -90px se convierta en algo como -110px */
+            /* Esto se logra haciendo la transformación completa en el hover */
+        }
+
+        /* Las transformaciones individuales ahora deben incluir el efecto de hover para un control preciso */
+        .petal-1 {
+            transform: translate(-50%, -50%) rotate(0deg) translateY(-90px);
+        }
+        .petal-1:hover {
+            transform: translate(-50%, -50%) rotate(0deg) translateY(-110px) scale(1.1); /* Se mueve más arriba y escala */
+        }
+
+        .petal-2 {
+            transform: translate(-50%, -50%) rotate(72deg) translateY(-90px);
+        }
+        .petal-2:hover {
+            transform: translate(-50%, -50%) rotate(72deg) translateY(-110px) scale(1.1);
+        }
+
+        .petal-3 {
+            transform: translate(-50%, -50%) rotate(144deg) translateY(-90px);
+        }
+        .petal-3:hover {
+            transform: translate(-50%, -50%) rotate(144deg) translateY(-110px) scale(1.1);
+        }
+
+        .petal-4 {
+            transform: translate(-50%, -50%) rotate(216deg) translateY(-90px);
+        }
+        .petal-4:hover {
+            transform: translate(-50%, -50%) rotate(216deg) translateY(-110px) scale(1.1);
+        }
+
+        .petal-5 {
+            transform: translate(-50%, -50%) rotate(288deg) translateY(-90px);
+        }
+        .petal-5:hover {
+            transform: translate(-50%, -50%) rotate(288deg) translateY(-110px) scale(1.1);
+        }
+
+
+        /* ... (el resto de tu código CSS y HTML) ... */
+
+
+        .flower-center {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #DAA520 0%, #FFD700 100%);
+            box-shadow: 0 0 20px rgba(218,165,32,0.5);
+            z-index: 10;
+            cursor: pointer;
+        }
+        .modal {
+            transition: all 0.4s ease-in-out;
+        }
+        .time-unit {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .music-control {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .card-content {
+            font-family: 'Dancing Script', cursive;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #DAA520;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between pt-16 pb-20">
+    <div class="fixed top-0 w-full bg-white/80 backdrop-blur-md shadow-sm z-50 px-4 py-3 flex justify-between items-center">
+        <div class="font-['Pacifico'] text-primary text-xl">Te amo 3 millones</div>
+        <div class="music-player flex items-center gap-3">
+            <div class="text-xs text-gray-600">Tocar-></div>
+            <button id="musicToggle" class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary music-control">
+                <i class="ri-play-fill ri-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="w-full px-4 flex flex-col items-center justify-center mt-8">
+        <h1 class="text-3xl font-['Pacifico'] text-primary mb-6">Nuestro Primer añito</h1>
+        
+        <div class="relative w-64 h-64 mb-10 mt-4">
+            <div class="petal petal-1" data-petal="1"></div>
+            <div class="petal petal-2" data-petal="2"></div>
+            <div class="petal petal-3" data-petal="3"></div>
+            <div class="petal petal-4" data-petal="4"></div>
+            <div class="petal petal-5" data-petal="5"></div>
+            
+            <div class="flower-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+                <i class="ri-heart-fill ri-lg text-white"></i>
+            </div>
+        </div>
+
+        <p class="text-center text-gray-600 italic mb-8 px-6">
+            Toca cada pétalo para descubrir nuestros momentos especiales
+        </p>
+
+        <div class="w-full bg-white/50 backdrop-blur-sm rounded-lg p-4 shadow-md">
+            <h2 class="text-center text-xl text-secondary font-semibold mb-4">Tiempo juntos</h2>
+            <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="time-unit bg-white/80 p-2 rounded-md shadow-sm">
+                    <span id="years" class="block text-2xl font-bold text-secondary">0</span>
+                    <span class="text-xs text-gray-500">Años</span>
+                </div>
+                <div class="time-unit bg-white/80 p-2 rounded-md shadow-sm">
+                    <span id="months" class="block text-2xl font-bold text-secondary">0</span>
+                    <span class="text-xs text-gray-500">Meses</span>
+                </div>
+                <div class="time-unit bg-white/80 p-2 rounded-md shadow-sm">
+                    <span id="days" class="block text-2xl font-bold text-secondary">0</span>
+                    <span class="text-xs text-gray-500">Días</span>
+                </div>
+                <div class="time-unit bg-white/80 p-2 rounded-md shadow-sm">
+                    <span id="hours" class="block text-2xl font-bold text-secondary">0</span>
+                    <span class="text-xs text-gray-500">Horas</span>
+                </div>
+                <div class="time-unit bg-white/80 p-2 rounded-md shadow-sm">
+                    <span id="minutes" class="block text-2xl font-bold text-secondary">0</span>
+                    <span class="text-xs text-gray-500">Minutos</span>
+                </div>
+                <div class="time-unit bg-white/80 p-2 rounded-md shadow-sm">
+                    <span id="seconds" class="block text-2xl font-bold text-secondary">0</span>
+                    <span class="text-xs text-gray-500">Segundos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none">
+        <div class="bg-white rounded-lg w-[320px] max-h-[80vh] overflow-hidden shadow-xl transform transition-all">
+            <div class="relative">
+                <img id="modalImage" class="w-full h-48 object-cover" src="" alt="Nuestro momento especial">
+                <button id="closeModal" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-white/80 rounded-full shadow-md cursor-pointer !rounded-button">
+                    <i class="ri-close-line ri-lg text-gray-600"></i>
+                </button>
+            </div>
+            <div class="p-5">
+                <h3 class="text-xl font-['Pacifico'] text-primary mb-3">Nuestro Momento</h3>
+                <p id="modalText" class="card-content text-gray-700 text-lg leading-relaxed"></p>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="music.m4a" type="audio/mpeg">
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modal functionality
+            const modal = document.getElementById('modal');
+            const closeModal = document.getElementById('closeModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalText = document.getElementById('modalText');
+            const petals = document.querySelectorAll('.petal');
+            
+            // Messages for each petal
+            const petalMessages = [
+                "Mi amor, contigo descubrí un mundo de colores que no sabía que existían. Cada día a tu lado es como ver el amanecer por primera vez.",
+                "Cada dia que pasa son mas motivos paea pensar y demostrar lo mucho que te amo, gracias por amarme tanto como yo lo hago.",
+                "En tus ojos encuentro mi refugio, mi paz y mi hogar. Vi un futuro lindo y prospero a tu lado.",
+                "Prometo estar para ti siempre, eres el amor que siempre he soñado eres como un angel para mi, cada segundo que pase te seguire amando.",
+                "Este primer año es solo el comienzo de nuestra hermosa historia de amor. Tenemos toda una vida por delante para amarnos más cada día."
+            ];
+            
+            // Images for each petal
+            const petalImages = [
+                "lindos.jpg",
+                "lindos.jpg",
+                "lindos.jpg",
+                "lindos.jpg",
+                "lindos.jpg"
+            ];
+            
+            // Open modal when clicking on a petal
+            petals.forEach((petal, index) => {
+                petal.addEventListener('click', () => {
+                    modalImage.src = petalImages[index];
+                    modalText.textContent = petalMessages[index];
+                    modal.classList.remove('opacity-0', 'pointer-events-none');
+                });
+            });
+            
+            // Close modal
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+            });
+            
+            // Music control
+            const musicToggle = document.getElementById('musicToggle');
+            const bgMusic = document.getElementById('bgMusic');
+            let isPlaying = false;
+            
+            musicToggle.addEventListener('click', () => {
+                if (isPlaying) {
+                    bgMusic.pause();
+                    musicToggle.innerHTML = '<i class="ri-play-fill ri-lg"></i>';
+                } else {
+                    bgMusic.play().catch(e => console.log("Audio play failed:", e));
+                    musicToggle.innerHTML = '<i class="ri-pause-fill ri-lg"></i>';
+                }
+                isPlaying = !isPlaying;
+            });
+            
+            // Time counter
+            const startDate = new Date('May 22, 2024 00:00:00').getTime();
+            
+            function updateCounter() {
+                const now = new Date().getTime();
+                const difference = now - startDate;
+                
+                // Time calculations
+                const years = Math.floor(difference / (1000 * 60 * 60 * 24 * 365));
+                const months = Math.floor((difference % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30.44));
+                const days = Math.floor((difference % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                
+                // Update HTML
+                document.getElementById('years').textContent = years;
+                document.getElementById('months').textContent = months;
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+                document.getElementById('seconds').textContent = seconds;
+            }
+            
+            // Update counter every second
+            updateCounter();
+            setInterval(updateCounter, 1000);
+        });
+    </script>
+</body>
+</html>
